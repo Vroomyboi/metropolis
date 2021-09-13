@@ -43,8 +43,9 @@
         {% endif %}
         <li><a href="{% url 'account_logout' %}" class="sidenav-close">Logout</a></li>
     </ul>
-
-    <a href="#" data-target="secondary-out" class="sidenav-trigger secondnav-trigger"><i class="zmdi zmdi-menu"></i></a>
+    <div class="sidenav-trigger secondnav-trigger">
+        <a href="#" data-target="secondary-out"><i class="zmdi zmdi-more-vert"></i></a>
+    </div>
 
     <div class="secondary-nav-wrapper">
         <ul class="secondary-nav">

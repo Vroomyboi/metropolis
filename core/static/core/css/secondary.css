@@ -66,3 +66,9 @@
     margin: 10px 15px;
     width: calc(100% - 30px);
 }
+
+@media screen and (max-width: 600px) {
+    .secondary-nav-wrapper {
+        display: none;
+    }
+}
