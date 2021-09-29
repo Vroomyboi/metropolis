@@ -1,3 +1,9 @@
 metropolis/config.py
 db.sqlite3
 *.pyc
+
+# start for @colourdelete
+/.idea
+/local/*
+/venv
+# end
