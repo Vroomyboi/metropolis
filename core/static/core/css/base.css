@@ -68,12 +68,42 @@ select{
     display: block;
 }
 
-.nav-wrapper{
+.navbar {
     background-color: var(--dark-blue);
     font-family: "Poppins", sans-serif;
     font-weight: 300;
 }
+.navbar-brand {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 
+    width: auto;
+    height: 80%;
+    padding: 0px 15px !important;
+
+    font-size: 1.25rem !important;
+    font-weight: 500;
+    -o-object-fit: contain;
+       object-fit: contain;
+}
+.navbar-brand img {
+    height: 51px;
+}
+.nav-item:hover, .nav-item:focus, .nav-item:active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.nav-link, .nav-link:hover {
+    color: var(--white) !important;
+}
+/*
 .sidenav{
     padding-top: 20px;
 }
@@ -142,7 +172,7 @@ select{
 
 .dropdown-content > li > a, .sidenav > li > a{
     color: var(--mid-blue);
-    /*width: 100%;*/
+    //width: 100%;
 }
 
 .dropdown-content> li > a:hover, .sidenav > li > a:hover{
@@ -156,7 +186,7 @@ select{
     background-color: var(--link-blue);
     margin: 10px 15px;
     width: calc(100% - 30px);
-}
+}*/
 
 .link{
     color: var(--link-blue);
