@@ -50,6 +50,16 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
         return context
 
 
+class AnnouncementTagList(TemplateView, mixins.TitleMixin):
+    template_name = "core/announcement/tag_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["feed_tag"] = models.Announcement.get_all(user=self.request.user).filter(tags=context["tag"])
+        context["tag"] = models.Tag.objects.get(id=context["tag"])
+        return context
+
+
 class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
     model = models.Announcement
     context_object_name = "announcement"
