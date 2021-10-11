@@ -36,6 +36,11 @@ urlpatterns = [
         views.AnnouncementDetail.as_view(),
         name="announcement_detail",
     ),
+    path(
+        "announcements/<int:tag>",
+        views.AnnouncementTagList.as_view(),
+        name="announcement_tag_list"
+    ),
     path("blog", views.BlogPostList.as_view(), name="blogpost_list"),
     path("blog/<str:slug>", views.BlogPostDetail.as_view(), name="blogpost_detail"),
     path("calendar", views.CalendarView.as_view(), name="calendar"),
