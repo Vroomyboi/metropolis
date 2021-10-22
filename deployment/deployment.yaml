@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metropolis-site
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metropolis-site
+  template:
+    metadata:
+      labels:
+        app: metropolis-site
+      annotations:
+        kubernetes.io/change-cause: "Deploy sha-87716de"
+    spec:
+      containers:
+      - image: ghcr.io/wlmac/metropolis:sha-87716de
+        name: metropolis
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: site-config
+          mountPath: "/app/metropolis/config.py"
+          subPath: config.py
+          readOnly: true
+      volumes:
+      - name: site-config
+        secret:
+          secretName: metropolis-site-config
