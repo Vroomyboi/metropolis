@@ -9,12 +9,11 @@
 
 {% block content %}
 <div class="row wrapper">
-    <div class="col m12 l6 hide-on-med-and-down">
-        <img class="responsive-img account-art" src="{% static 'core/img/log-in.png' %}" />
+    <div class="col-12 col-lg-6">
+        <img class="img-fluid" src="{% static 'core/img/log-in.png' %}" />
     </div>
-    <div class="col m12 l6">
+    <div class="col-12 col-lg-6"> 
         <div class="form-wrapper">
-
             {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -24,12 +23,12 @@
             {% endif %}
 
             <div class="tab-wrapper row">
-                <div class="col s6">
+                <div class="col">
                     <a href="{% url 'account_login' %}">
                         <div class="tab current">Log In</div>
                     </a>
                 </div>
-                <div class="col s6">
+                <div class="col">
                     <a href="{% url 'account_signup' %}">
                         <div class="tab">Sign Up</div>
                     </a>
@@ -37,15 +36,11 @@
             </div>
             <form class="login" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
-
-                
-
                 <table border="1" >
                     {% for field in form.visible_fields %}
                     <div class="row">
-                        
                         {% if field.auto_id != "id_remember" %}
-                        <div class="input-field col s12">
+                        <div class="col" >
                             {{ field.label_tag }}
                             {{ field }}
                             {{ field.errors }}
