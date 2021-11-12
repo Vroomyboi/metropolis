@@ -3,8 +3,9 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
+from django.utils.safestring import mark_safe
 
-from core.utils import generate_slam as gs
+from core.utils import generate_slam as gs, get_week_schedule_json
 
 from .. import models
 from . import mixins
@@ -26,7 +27,11 @@ class Index(TemplateView, mixins.TitleMixin):
             start_date__lte=datetime_now, end_date__gte=datetime_now
         )[:3]
 
-        context["blogpost"] = models.BlogPost.objects.filter(is_published=True).first()
+        context["blogpost"] = models.BlogPost.objects.filter(
+            is_published=True).first()
+
+        context["schedule_json"] = mark_safe(
+            get_week_schedule_json(self.request.user))
 
         return context
 

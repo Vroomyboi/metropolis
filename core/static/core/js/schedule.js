@@ -38,6 +38,10 @@ function getDateTimeNow() {
 }
 
 function setup() {
+    scheduleData = JSON.parse($('#schedule_data').text())
+    scheduleIsPersonal = true;
+    update();
+    /*
     fetch('/api/term/current')
         .then(response => response.json())
         .then(data => {
@@ -65,7 +69,7 @@ function setup() {
         })
         .catch(err => {
             console.error('Fetch term_current request failed', err);
-        });
+        });*/
 }
 
 function update() {
