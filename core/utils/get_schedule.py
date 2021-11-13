@@ -1,4 +1,5 @@
 import datetime
+from dataclasses import dataclass
 import json
 from rest_framework.utils.encoders import JSONEncoder
 from django.utils import timezone
@@ -6,27 +7,32 @@ from django.utils import timezone
 from .. import models
 
 
-def get_week_schedule_json(user):
+@dataclass
+class WeekSchedule:
+    data: str
+    is_personal: bool
+
+
+def get_week_schedule(user) -> WeekSchedule:
     if user.is_authenticated:
         date = timezone.localdate()
 
-        result = {}
+        result = {}  # TODO: use a dictionary comprehension
 
         for day in range(7):
             result[date.isoformat()] = user.schedule(target_date=date)
             date += datetime.timedelta(days=1)
-        return json.dumps(result, cls=JSONEncoder)
+        return WeekSchedule(json.dumps(result, cls=JSONEncoder), True)
     else:
         term = models.Term.get_current()
 
-        if term is None:
-            return Response({}, status=status.HTTP_404_NOT_FOUND)
-
         date = timezone.localdate()
 
-        result = {}
+        result = {}  # TODO: use a dictionary comprehension
 
         for day in range(7):
-            result[date.isoformat()] = term.day_schedule(target_date=date)
+            # TODO: move term is None logic into a separate loop
+            result[date.isoformat()] = term.day_schedule(
+                target_date=date) if term is not None else []
             date += datetime.timedelta(days=1)
-        return json.dumps(result, cls=JSONEncoder)
+        return WeekSchedule(json.dumps(result, cls=JSONEncoder), False)

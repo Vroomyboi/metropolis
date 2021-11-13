@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 from django.utils.safestring import mark_safe
 
-from core.utils import generate_slam as gs, get_week_schedule_json
+from core.utils import generate_slam as gs, get_week_schedule
 
 from .. import models
 from . import mixins
@@ -30,8 +30,10 @@ class Index(TemplateView, mixins.TitleMixin):
         context["blogpost"] = models.BlogPost.objects.filter(
             is_published=True).first()
 
-        context["schedule_json"] = mark_safe(
-            get_week_schedule_json(self.request.user))
+        week_schedule = get_week_schedule(self.request.user)
+        context["schedule_data_js"] = mark_safe(
+            f"let index_page_data={{scheduleData: {week_schedule.data}, scheduleIsPersonal: {'true' if week_schedule.is_personal else 'false'} }}"
+        )
 
         return context
 

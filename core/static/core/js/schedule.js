@@ -38,38 +38,9 @@ function getDateTimeNow() {
 }
 
 function setup() {
-    scheduleData = JSON.parse($('#schedule_data').text())
-    scheduleIsPersonal = true;
+    scheduleData = index_page_data.scheduleData;
+    scheduleIsPersonal = index_page_data.scheduleIsPersonal;
     update();
-    /*
-    fetch('/api/term/current')
-        .then(response => response.json())
-        .then(data => {
-            fetch(`/api/term/${data.id}/schedule/week`)
-                .then(response => response.json())
-                .then(data => {
-                    scheduleData = data;
-                    fetch(`/api/me/schedule/week`)
-                        .then(response => {
-                            if (!response.ok) throw new Error(`Status ${response.status} received`);
-                            return response.json();
-                        })
-                        .then(data => {
-                            const todayDate = getDateTimeNow().toISODate();
-                            if (todayDate in data && data[todayDate].length > 0) {
-                                scheduleData = data;
-                                scheduleIsPersonal = true;
-                            }
-                            update();
-                        })
-                        .catch(err => {
-                            console.error('Fetch me_schedule_week request failed', err);
-                        });
-                })
-        })
-        .catch(err => {
-            console.error('Fetch term_current request failed', err);
-        });*/
 }
 
 function update() {
