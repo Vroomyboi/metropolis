@@ -32,7 +32,7 @@ class Index(TemplateView, mixins.TitleMixin):
 
         week_schedule = get_week_schedule(self.request.user)
         context["schedule_data_js"] = mark_safe(
-            f"let index_page_data={{scheduleData: {week_schedule.data}, scheduleIsPersonal: {'true' if week_schedule.is_personal else 'false'} }}"
+            f"let index_page_data={{scheduleData: {week_schedule.data}, scheduleIsPersonal: {week_schedule.get_is_personal_js()}, loggedIn: {week_schedule.get_logged_in_js()} }}"
         )
 
         return context
