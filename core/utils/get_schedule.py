@@ -1,54 +1,62 @@
 import datetime
 from dataclasses import dataclass
 import json
-from rest_framework.utils.encoders import JSONEncoder
+import rest_framework.utils.encoders
 from django.utils import timezone
 
 from .. import models
 
 
 @dataclass
-class WeekSchedule:
-    data: str
+class DaySchedule:
+    schedule: dict
     is_personal: bool
-    logged_in: bool
-
-    def get_is_personal_js(self):
-        return "true" if self.is_personal else "false"
-
-    def get_logged_in_js(self):
-        return "true" if self.logged_in else "false"
 
 
-def generic_day_schedule(term,date):
-    if term is None:
-        return []
-    else:
-        return term.day_schedule(target_date=date)
+class JSONEncoder(rest_framework.utils.encoders.JSONEncoder):
+    """
+    Extends rest_framework JSONEncoder to encode DaySchedule.
+    """
+
+    def default(self, obj):
+        if isinstance(obj, DaySchedule):
+            return obj.__dict__
+        return super().default(obj)
 
 
-def get_week_schedule(user) -> WeekSchedule:
-    term = models.Term.get_current()
+def generic_day_schedule(term, date) -> DaySchedule:
+    schedule = term.day_schedule(target_date=date) if term is not None else []
+    return DaySchedule(schedule, False)
+
+
+def get_week_schedule(user) -> dict:
     date = timezone.localdate()
 
     if user.is_authenticated:
         result = {}  # TODO: use a dictionary comprehension
 
-        is_personal=False
         for day in range(7):
-            day_schedule=user.schedule(target_date=date)
-            if len(day_schedule)==0:
-                day_schedule=generic_day_schedule(term, date)
-            else:
-                is_personal=True
+            term = models.Term.get_current(target_date=date)
+            # first try using personal day schedule
+            day_schedule = DaySchedule(user.schedule(target_date=date), True)
+            # switch to generic day schedule if personal day schedule is empty
+            if len(day_schedule.schedule) == 0:
+                day_schedule = generic_day_schedule(term, date)
             result[date.isoformat()] = day_schedule
             date += datetime.timedelta(days=1)
 
-        return WeekSchedule(json.dumps(result, cls=JSONEncoder), is_personal, True)
+        return result
     else:
         result = {}  # TODO: use a dictionary comprehension
 
         for day in range(7):
-            result[date.isoformat()] = generic_day_schedule(term,date)
+            term = models.Term.get_current(target_date=date)
+            result[date.isoformat()] = generic_day_schedule(term, date)
             date += datetime.timedelta(days=1)
-        return WeekSchedule(json.dumps(result, cls=JSONEncoder), False, False)
+        return result
+
+
+def get_schedule_index_page_json(user) -> str:
+    data = get_week_schedule(user)
+    result = {'scheduleData': data, 'loggedIn': user.is_authenticated}
+    return json.dumps(result, cls=JSONEncoder)

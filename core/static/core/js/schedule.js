@@ -1,7 +1,7 @@
 const DateTime = luxon.DateTime;
 const Duration = luxon.Duration;
 let scheduleData = [];
-let scheduleIsPersonal = false;
+let loggedIn = false;
 
 function formatHours(hours) {
     return `${hours} ${hours == 1 ? "hour" : "hours"}`;
@@ -39,19 +39,24 @@ function getDateTimeNow() {
 
 function setup() {
     scheduleData = index_page_data.scheduleData;
-    scheduleIsPersonal = index_page_data.scheduleIsPersonal;
+    loggedIn = index_page_data.loggedIn;
     update();
 }
 
 function update() {
     let currentCourse;
     let description;
+    let nudgeMsg = '';
     let todayData;
+    let todayScheduleIsPersonal = false;
 
     const now = getDateTimeNow();
 
     if (now.toISODate() in scheduleData) {
-        todayData = scheduleData[now.toISODate()];
+        let todayScheduleData = scheduleData[now.toISODate()];
+        todayData = todayScheduleData.schedule;
+        todayScheduleIsPersonal = todayScheduleData.is_personal;
+
         let courseData;
 
         for (const course of todayData) {
@@ -62,6 +67,12 @@ function update() {
         }
 
         if (courseData) {
+            if (!loggedIn) {
+                nudgeMsg = 'YOU ARE NOT LOGGED IN!!!'
+            } else if (!todayScheduleIsPersonal) {
+                nudgeMsg = 'YOU DO NOT HAVE A PERSONAL SCHEDULE TODAY!!!'
+            }
+
             currentCourse = courseData.course;
 
             if (now < DateTime.fromISO(courseData.time.start)) {
@@ -85,14 +96,19 @@ function update() {
 
     $(".schedule-course").text(currentCourse);
     $(".schedule-description").text(description);
+    $(".schedule-nudge-msg").text(nudgeMsg);
 
     if (todayData) {
-        if (todayData.length > 0) $(".schedule-cycle").text(todayData[0].cycle);
+        if (todayData.length > 0) {
+            $(".schedule-cycle").text(todayData[0].cycle);
+        } else {
+            $(".schedule-cycle").empty()
+        }
         let todayCoursesEl = $(".schedule-today-courses").empty();
         for (let i = 0; i < todayData.length; i++) {
             if (todayData[i].course) {
                 let courseDescription;
-                if (scheduleIsPersonal) courseDescription = `${todayData[i].description.course} - ${todayData[i].course}`;
+                if (todayScheduleIsPersonal) courseDescription = `${todayData[i].description.course} - ${todayData[i].course}`;
                 else courseDescription = `${todayData[i].description.course}`;
 
                 let courseEl = $("<span class='schedule-today-course'></span>").text(courseDescription);
