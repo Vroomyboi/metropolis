@@ -31,7 +31,7 @@ class Index(TemplateView, mixins.TitleMixin):
             is_published=True).first()
 
         context["schedule_data_js"] = mark_safe(
-            f"let index_page_data={get_schedule_index_page_json(self.request.user)}"
+            f"let index_page_data = {get_schedule_index_page_json(self.request.user)}"
         )
 
         return context
