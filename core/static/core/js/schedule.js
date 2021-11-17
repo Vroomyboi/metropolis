@@ -2,6 +2,7 @@ const DateTime = luxon.DateTime;
 const Duration = luxon.Duration;
 let scheduleData = [];
 let loggedIn = false;
+let offline = false;
 
 function formatHours(hours) {
     return `${hours} ${hours == 1 ? "hour" : "hours"}`;
@@ -38,8 +39,16 @@ function getDateTimeNow() {
 }
 
 function setup() {
-    scheduleData = index_page_data.scheduleData;
-    loggedIn = index_page_data.loggedIn;
+    // load schedule data differently depending on whether the user is offline
+    if (typeof index_page_data !== 'undefined') {
+        // not offline: load data from index page
+        scheduleData = index_page_data.scheduleData;
+        loggedIn = index_page_data.loggedIn;
+    }
+    else {
+        // offline: load data by fetching a separate file
+        offline = true;
+    }
     update();
 }
 
@@ -67,10 +76,12 @@ function update() {
         }
 
         if (courseData) {
-            if (!loggedIn) {
-                nudgeMsg = 'YOU ARE NOT LOGGED IN!!!'
-            } else if (!todayScheduleIsPersonal) {
-                nudgeMsg = 'YOU DO NOT HAVE A PERSONAL SCHEDULE TODAY!!!'
+            if (!offline) {
+                if (!loggedIn) {
+                    nudgeMsg = 'YOU ARE NOT LOGGED IN!!!'
+                } else if (!todayScheduleIsPersonal) {
+                    nudgeMsg = 'YOU DO NOT HAVE A PERSONAL SCHEDULE TODAY!!!'
+                }
             }
 
             currentCourse = courseData.course;
