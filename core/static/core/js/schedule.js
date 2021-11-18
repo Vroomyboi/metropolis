@@ -44,10 +44,15 @@ function setup() {
         // not offline: load data from index page
         scheduleData = index_page_data.scheduleData;
         loggedIn = index_page_data.loggedIn;
+        localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
     }
     else {
-        // offline: load data by fetching a separate file
+        // offline: load data from localStorage
         offline = true;
+        let localScheduleData = localStorage.getItem('scheduleData');
+        if (localScheduleData) {
+            scheduleData = JSON.parse(localScheduleData);
+        }
     }
     update();
 }
