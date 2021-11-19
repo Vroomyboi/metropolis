@@ -81,13 +81,12 @@ function update() {
         }
 
         if (courseData) {
-            if (!offline) {
-                if (!loggedIn) {
-                    nudgeMsg = 'YOU ARE NOT LOGGED IN!!!'
-                } else if (!todayScheduleIsPersonal) {
-                    nudgeMsg = 'YOU DO NOT HAVE A PERSONAL SCHEDULE TODAY!!!'
-                }
+            if (!loggedIn) {
+                nudgeMsg = 'YOU ARE NOT LOGGED IN!!!'
+            } else if (!todayScheduleIsPersonal) {
+                nudgeMsg = 'YOU DO NOT HAVE A PERSONAL SCHEDULE TODAY!!!'
             }
+        
 
             currentCourse = courseData.course;
 
@@ -112,7 +111,9 @@ function update() {
 
     $(".schedule-course").text(currentCourse);
     $(".schedule-description").text(description);
-    $(".schedule-nudge-msg").text(nudgeMsg);
+
+    if(!offline){
+    $(".schedule-nudge-msg").text(nudgeMsg);}
 
     if (todayData) {
         if (todayData.length > 0) {

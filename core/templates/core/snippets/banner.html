@@ -1,19 +1,17 @@
 {% load static %}
 {% load settings_tags %}
 <div class="banner">
-    <div class="background"><img src="{% settings_value 'THEME_BANNER' %}"/></div>
-    {% if banner_message %}
-        <div class="overlay-container">
-            <div class="banner-message center-align">
-                <span>{{ banner_message }}</span>
-            </div>
+    <div class="background"><img src="{% settings_value 'THEME_BANNER' %}" /></div>
+    <div class="overlay-container">
+        <div class="banner-message center-align">
+            <span class="schedule-nudge-msg">{{ banner_message }} TODO: don't make other stuff off center when banner
+                message is empty</span>
         </div>
-    {% endif %}
+    </div>
     <div class="overlay-container valign-wrapper">
         <div class="next-class center-align">
             <h4 class="schedule-course"></h4>
             <span class="schedule-description"></span>
-            <span class="schedule-nudge-msg"></span>
         </div>
     </div>
     <div class="schedule-today-overlay hide-on-small-and-down">
