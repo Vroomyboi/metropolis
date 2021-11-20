@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 from django.utils.safestring import mark_safe
 
-from core.utils import generate_slam as gs, get_schedule_index_page_json
+from core.utils import generate_slam as gs, get_week_schedule_json
 
 from .. import models
 from . import mixins
@@ -31,7 +31,7 @@ class Index(TemplateView, mixins.TitleMixin):
             is_published=True).first()
 
         context["schedule_data_js"] = mark_safe(
-            f"let index_page_data = {get_schedule_index_page_json(self.request.user)}"
+            f"let index_page_data = {get_week_schedule_json(self.request.user)}"
         )
 
         return context

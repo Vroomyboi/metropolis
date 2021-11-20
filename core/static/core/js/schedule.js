@@ -41,7 +41,7 @@ function setup() {
     // load schedule data differently depending on whether the user is offline
     if (typeof index_page_data !== 'undefined') {
         // not offline: load data from index page
-        scheduleData = index_page_data.scheduleData;
+        scheduleData = index_page_data;
         localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
     }
     else {

@@ -56,7 +56,5 @@ def get_week_schedule(user) -> dict:
         return result
 
 
-def get_schedule_index_page_json(user) -> str:
-    data = get_week_schedule(user)
-    result = {'scheduleData': data, 'loggedIn': user.is_authenticated}
-    return json.dumps(result, cls=JSONEncoder)
+def get_week_schedule_json(user) -> str:
+    return json.dumps(get_week_schedule(user), cls=JSONEncoder)
