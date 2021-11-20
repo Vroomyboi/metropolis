@@ -27,13 +27,13 @@ class Index(TemplateView, mixins.TitleMixin):
             start_date__lte=datetime_now, end_date__gte=datetime_now
         )[:3]
 
-        context["blogpost"] = models.BlogPost.objects.filter(
-            is_published=True).first()
+        context["blogpost"] = models.BlogPost.objects.filter(is_published=True).first()
 
         context["schedule_data_js"] = mark_safe(
             f"let index_page_data = {get_week_schedule_json(self.request.user)}"
         )
 
+        context["banner_message"] = "baf"
         return context
 
 
