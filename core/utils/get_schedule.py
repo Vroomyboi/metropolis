@@ -13,6 +13,13 @@ class DaySchedule:
     is_personal: bool
 
 
+@dataclass
+class WeekScheduleInfo:
+    json_data: str
+    logged_in: bool
+    contains_personal: bool
+
+
 class JSONEncoder(rest_framework.utils.encoders.JSONEncoder):
     """
     Extends rest_framework JSONEncoder to encode DaySchedule.
@@ -56,5 +63,22 @@ def get_week_schedule(user) -> dict:
         return result
 
 
-def get_week_schedule_json(user) -> str:
-    return json.dumps(get_week_schedule(user), cls=JSONEncoder)
+def get_week_schedule_info(user) -> WeekScheduleInfo:
+    data = get_week_schedule(user)
+
+    return WeekScheduleInfo(
+        json_data=json.dumps(data, cls=JSONEncoder),
+        contains_personal=any(
+            day_schedule.is_personal for day_schedule in data.values()
+        ),
+        logged_in=user.is_authenticated,
+    )
+
+
+def get_schedule_nudge_message(info: WeekScheduleInfo) -> str:
+    if not info.logged_in:
+        return "A"
+    elif not info.contains_personal:
+        return "B"
+    else:
+        return ""
