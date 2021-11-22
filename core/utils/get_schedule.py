@@ -1,9 +1,10 @@
 import datetime
-from dataclasses import dataclass
 import json
+from dataclasses import dataclass
+
 import rest_framework.utils.encoders
-from django.utils import timezone
 from django.shortcuts import reverse
+from django.utils import timezone
 
 from .. import models
 

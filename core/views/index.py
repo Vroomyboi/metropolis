@@ -1,15 +1,12 @@
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
-from django.utils.safestring import mark_safe
 
-from core.utils import (
-    generate_slam as gs,
-    get_week_schedule_info,
-    get_schedule_nudge_message,
-)
+from core.utils import generate_slam as gs
+from core.utils import get_schedule_nudge_message, get_week_schedule_info
 
 from .. import models
 from . import mixins
