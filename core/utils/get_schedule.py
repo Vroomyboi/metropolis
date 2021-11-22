@@ -3,6 +3,7 @@ from dataclasses import dataclass
 import json
 import rest_framework.utils.encoders
 from django.utils import timezone
+from django.shortcuts import reverse
 
 from .. import models
 
@@ -76,9 +77,15 @@ def get_week_schedule_info(user) -> WeekScheduleInfo:
 
 
 def get_schedule_nudge_message(info: WeekScheduleInfo) -> str:
-    if not info.logged_in:
-        return "A"
+    date = timezone.localdate()
+    current_term = models.Term.get_current(target_date=date)
+    if current_term is None:
+        return ""
+    elif not info.logged_in:
+        sign_up_url = reverse("account_signup")
+        return f"<a href='{sign_up_url}'>Sign up</a> and add your timetable to see a personalized schedule here."
     elif not info.contains_personal:
-        return "B"
+        add_timetable_url = reverse("timetable_create", args=[current_term.id])
+        return f"<a href='{add_timetable_url}'>Add your timetable</a> to see a personalized schedule here."
     else:
         return ""
