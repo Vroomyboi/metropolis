@@ -19,7 +19,7 @@ class DaySchedule:
 class WeekScheduleInfo:
     json_data: str
     logged_in: bool
-    contains_personal: bool
+    nudge_add_timetable: bool
 
 
 class JSONEncoder(rest_framework.utils.encoders.JSONEncoder):
@@ -35,7 +35,9 @@ class JSONEncoder(rest_framework.utils.encoders.JSONEncoder):
 
 def generic_day_schedule(term, date) -> DaySchedule:
     schedule = term.day_schedule(target_date=date) if term is not None else []
-    return DaySchedule(schedule, False)
+    # generic day schedule is personal if it is empty
+    is_personal = len(schedule) == 0
+    return DaySchedule(schedule, is_personal)
 
 
 def get_week_schedule(user) -> dict:
@@ -70,7 +72,7 @@ def get_week_schedule_info(user) -> WeekScheduleInfo:
 
     return WeekScheduleInfo(
         json_data=json.dumps(data, cls=JSONEncoder),
-        contains_personal=any(
+        nudge_add_timetable=not all(
             day_schedule.is_personal for day_schedule in data.values()
         ),
         logged_in=user.is_authenticated,
@@ -85,7 +87,7 @@ def get_schedule_nudge_message(info: WeekScheduleInfo) -> str:
     elif not info.logged_in:
         sign_up_url = reverse("account_signup")
         return f"<a href='{sign_up_url}'>Sign up</a> and add your timetable to see a personalized schedule here."
-    elif not info.contains_personal:
+    elif info.nudge_add_timetable:
         add_timetable_url = reverse("timetable_create", args=[current_term.id])
         return f"<a href='{add_timetable_url}'>Add your timetable</a> to see a personalized schedule here."
     else:
