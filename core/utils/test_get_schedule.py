@@ -1,6 +1,7 @@
-from ..models import User, Term, Timetable, Event, Organization
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase
+
+from ..models import Event, Organization, Term, Timetable, User
 from .get_schedule import *
 
 
