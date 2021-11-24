@@ -7,8 +7,11 @@ from .get_schedule import *
 
 def create_current_term():
     now = timezone.now()
-    term = Term(start_date=now, end_date=now +
-                datetime.timedelta(days=100), timetable_format='week')
+    term = Term(
+        start_date=now,
+        end_date=now + datetime.timedelta(days=100),
+        timetable_format="week",
+    )
     term.save()
     return term
 
@@ -32,8 +35,13 @@ def create_school_org(user: User) -> Organization:
 
 def create_winter_break(school_org: Organization, term: Term):
     now = timezone.now()
-    event = Event(start_date=now, end_date=now +
-                  datetime.timedelta(days=10), organization=school_org, term=term, is_instructional=False)
+    event = Event(
+        start_date=now,
+        end_date=now + datetime.timedelta(days=10),
+        organization=school_org,
+        term=term,
+        is_instructional=False,
+    )
     event.save()
 
 
@@ -80,19 +88,20 @@ class GetScheduleNudgeMessageTests(TestCase):
     def test_current_term_logged_in_personalized(self):
         create_current_term()
         info = WeekScheduleInfo(
-            json_data="{}", logged_in=True, nudge_add_timetable=False)
-        self.assertEqual(
-            get_schedule_nudge_message(info), "")
+            json_data="{}", logged_in=True, nudge_add_timetable=False
+        )
+        self.assertEqual(get_schedule_nudge_message(info), "")
 
     def test_current_term_logged_in_not_personalized(self):
         create_current_term()
         info = WeekScheduleInfo(
-            json_data="{}", logged_in=True, nudge_add_timetable=True)
-        self.assertTrue(
-            "Add your timetable" in get_schedule_nudge_message(info))
+            json_data="{}", logged_in=True, nudge_add_timetable=True
+        )
+        self.assertTrue("Add your timetable" in get_schedule_nudge_message(info))
 
     def test_current_term_not_logged_in(self):
         create_current_term()
         info = WeekScheduleInfo(
-            json_data="{}", logged_in=False, nudge_add_timetable=True)
+            json_data="{}", logged_in=False, nudge_add_timetable=True
+        )
         self.assertTrue("Sign up" in get_schedule_nudge_message(info))
