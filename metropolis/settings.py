@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'martor',
     'django_select2',
     'pwa',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -413,7 +415,9 @@ SITE_URL = 'http://127.0.0.1:8000'
 TOS_URL = '/terms/'
 PRIVPOL_URL = '/privacy/'
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

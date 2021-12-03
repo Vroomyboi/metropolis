@@ -1,6 +1,7 @@
 {% extends 'account/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
@@ -36,39 +37,8 @@
             </div>
             <form class="login" method="POST" action="{% url 'account_login' %}">
                 {% csrf_token %}
-                <table border="1" >
-                    {% for field in form.visible_fields %}
-                    <div class="row">
-                        {% if field.auto_id != "id_remember" %}
-                        <div class="col" >
-                            {{ field.label_tag }}
-                            {{ field }}
-                            {{ field.errors }}
-                        {% else %}
-<!--                         <div class="col s12">
-                            <label for="id_remember" class="valign-wrapper">
-                                <input class="filled-in checkbox-blue" type="checkbox" name="remember" id="id_remember">
-                                <span>Remember Me</span> -->
-                                {# {{ field.errors }} #}
-                            </label> 
-                        {% endif %}
 
-                        <script type="text/javascript">
-                            var elmID = "{{field.auto_id}}";
-                            document.getElementById(elmID).removeAttribute("placeholder");
-                            console.log(document.getElementById(elmID))
-                        </script>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </table>
-
-                {{ form.non_field_errors }}
-
-                {% for hidden_field in form.hidden_fields %}
-                {{ hidden_field.errors }}
-                {{ hidden_field }}
-                {% endfor %}
+                {% crispy form %}
 
                 {% if redirect_field_value %}
                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
