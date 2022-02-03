@@ -9,7 +9,7 @@ from martor.utils import markdownify
 
 register = template.Library()
 
-# current_site = Site.objects.get_current()
+current_site = Site.objects.get_current()
 bodge_pattern = re.compile(f"\[([^\]]*)\]\(/")
 
 
